@@ -9,6 +9,15 @@ pipeline {
                 sh "docker build . -t msriram226/nodeapp:${DOCKER_TAG}"
             }
         }    
+    stage(' Docker push Image'){
+            steps{
+                withCredentials([string(credentialsId: 'Docker_Hub', variable: 'DockerHubPasswd')]) {
+                sh "docker push -u msriram226 -p ${DockerHubPasswd} "
+                    }
+                
+            }
+        }    
+    
     }         
 }
 def getDockerTag(){
