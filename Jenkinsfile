@@ -15,7 +15,7 @@ pipeline {
                 sh "docker login -u msriram226 -p ${DockerHubPasswd}"
                     sh "docker push msriram226/nodeapp:${DOCKER_TAG}"    
                     }
-                
+            } 
             }
         }
         
