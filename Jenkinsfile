@@ -14,11 +14,10 @@ pipeline {
                 withCredentials([string(credentialsId: 'Docker_Hub', variable: 'DockerHubPasswd')]) {
                 sh "docker login -u msriram226 -p ${DockerHubPasswd}"
                     sh "docker push msriram226/nodeapp:${DOCKER_TAG}"    
-                    }
+                }
             } 
-            }
         }
-        
+                
         Stage(' Deploy on Kubernetes'){
             steps{
                 sh "chmod +x changeTag.sh"
@@ -33,11 +32,11 @@ pipeline {
                         sh "ssh msriram208@10.128.15.210 kubectl create -f ."                   }
                 }
             }
-    
+        }
     }         
+}
 }
 def getDockerTag(){
     def tag  = sh script: 'git rev-parse HEAD', returnStdout: true
     return tag
 }
-
