@@ -17,7 +17,22 @@ pipeline {
                     }
                 
             }
-        }    
+        }
+        
+        Stage(' Deploy on Kubernetes'){
+            steps{
+                sh "chmod +x changeTag.sh"
+                sh "./changeTag.sh ${DOCKER_TAG}"
+                sshagent(['kops-machine']) {
+                sh "SCP -o StrictHostKeyChecking=no services.yml node-app-pod.yml msriram208@10.128.15.210:/home/"
+                script{
+                    try {
+                        sh "ssh msriram208@10.128.15.210 kubectl apply -f ."
+
+                    } catch(error){
+                        sh "ssh msriram208@10.128.15.210 kubectl create -f ."                   }
+                }
+            }
     
     }         
 }
